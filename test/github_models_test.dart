@@ -19,6 +19,7 @@ void main() {
     expect(issueRequest.action, 'labeled');
 
     Issue issue = issueRequest.issue;
+    expect(issue.body, 'This is an issue body');
     expect(issue.githubUrl,
         Uri.parse('https://github.com/dart-lang/angular2_build/issues/1'));
 

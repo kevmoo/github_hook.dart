@@ -1,3 +1,7 @@
+## 0.2.1
+
+* Added `body` field to `Issue`.
+
 ## 0.2.0
 
 * Added a number of typed properties to `IssueHookRequest`.

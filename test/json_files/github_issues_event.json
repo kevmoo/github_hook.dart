@@ -43,7 +43,7 @@
     "created_at": "2015-06-26T17:22:15Z",
     "updated_at": "2015-06-26T17:22:15Z",
     "closed_at": null,
-    "body": ""
+    "body": "This is an issue body"
   },
   "label": {
     "url": "https://api.github.com/repos/dart-lang/angular2_build/labels/Area-VM",
