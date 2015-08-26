@@ -23,6 +23,8 @@ void main() {
     expect(issue.githubUrl,
         Uri.parse('https://github.com/dart-lang/angular2_build/issues/1'));
 
+    expect(issue.user.user, 'kevmoo');
+
     var label = issue.labels.single;
     expect(label.name, 'Area-VM');
     expect(label.url, Uri.parse(

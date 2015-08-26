@@ -1,3 +1,7 @@
+## 0.2.2
+
+* Added `user` field to `Issue`.
+
 ## 0.2.1
 
 * Added `body` field to `Issue`.
