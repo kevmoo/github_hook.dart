@@ -18,7 +18,6 @@ const _signatureHeader = 'x-github-delivery';
 Handler createGitHubHookMiddleware(
     String secret, GitHubRequestHandler innerHandler) {
   return (Request request) async {
-
     // If it's not a POST, return a 405 - invalid method
     if (request.method != 'POST') {
       return new Response(405);

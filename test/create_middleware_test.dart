@@ -16,8 +16,8 @@ final _neverWinHandler = createGitHubHookMiddleware(_secret, (body) {
 
 void main() {
   test('valid request continues', () async {
-    var handler = createGitHubHookMiddleware(_secret,
-        (HookRequest request) async {
+    var handler =
+        createGitHubHookMiddleware(_secret, (HookRequest request) async {
       expect(request.content, _dummyPayload);
     });
 
@@ -42,8 +42,8 @@ void main() {
   });
 
   test('valid issues request', () async {
-    var handler = createGitHubHookMiddleware(_secret,
-        (IssuesHookRequest request) async {
+    var handler =
+        createGitHubHookMiddleware(_secret, (IssuesHookRequest request) async {
       expect(request.action, 'opened');
     });
 

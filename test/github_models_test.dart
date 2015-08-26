@@ -13,8 +13,9 @@ void main() {
 
     var jsonMap = JSON.decode(str);
 
-    var issueRequest = new HookRequest('issues',
-        'ccd5a280-1c37-11e5-9d84-6974af26189f', jsonMap) as IssuesHookRequest;
+    var issueRequest = new HookRequest(
+            'issues', 'ccd5a280-1c37-11e5-9d84-6974af26189f', jsonMap)
+        as IssuesHookRequest;
 
     expect(issueRequest.action, 'labeled');
 
@@ -27,8 +28,10 @@ void main() {
 
     var label = issue.labels.single;
     expect(label.name, 'Area-VM');
-    expect(label.url, Uri.parse(
-        "https://api.github.com/repos/dart-lang/angular2_build/labels/Area-VM"));
+    expect(
+        label.url,
+        Uri.parse(
+            "https://api.github.com/repos/dart-lang/angular2_build/labels/Area-VM"));
 
     var repo = issueRequest.repository;
     expect(repo.name, 'angular2_build');
