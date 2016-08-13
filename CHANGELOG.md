@@ -1,3 +1,7 @@
+## 0.2.2+1
+
+* Upgrade dependencies.
+
 ## 0.2.2
 
 * Added `user` field to `Issue`.

@@ -3,6 +3,7 @@ library api.github_hook;
 import 'dart:async';
 import 'dart:convert';
 
+import 'package:convert/convert.dart';
 import 'package:crypto/crypto.dart';
 import 'package:shelf/shelf.dart';
 
@@ -119,63 +120,33 @@ Future _decodeJsonVerify(
 
   assert(expectedSha1.length == 40);
 
-  var sha1 = new SHA1();
   var secretBytes = UTF8.encode(secret);
 
-  var hmac = new HMAC(sha1, secretBytes);
+  var hmac = new Hmac(sha1, secretBytes);
+  var hmacSink = new AccumulatorSink<Digest>();
+  var hmacByteSink = hmac.startChunkedConversion(hmacSink);
 
-  var silly = new _SillySink();
-  var sink = _binaryJsonDecoder.startChunkedConversion(silly);
+  var jsonSink = new AccumulatorSink();
+  var jsonByteSink = _binaryJsonDecoder.startChunkedConversion(jsonSink);
 
   await for (var byteList in source) {
-    hmac.add(byteList);
-    sink.add(byteList);
+    hmacByteSink.add(byteList);
+    jsonByteSink.add(byteList);
   }
 
-  var result = hmac.close();
+  hmacByteSink.close();
 
-  var resultSha1 = CryptoUtils.bytesToHex(result);
+  var resultSha1 = hex.encode(hmacSink.events.single.bytes);
 
   if (expectedSha1 != resultSha1) {
     throw new BadSignatureError(expectedSha1, resultSha1);
   }
 
-  sink.close();
+  jsonByteSink.close();
 
-  return silly.value;
+  return jsonSink.events.single;
 }
 
 final _binaryJsonDecoder = UTF8.decoder.fuse(JSON.decoder);
 
 const _sha1Header = 'sha1=';
-
-class _SillySink extends Sink<Object> {
-  bool _added = false;
-  bool _closed = false;
-  dynamic _value;
-
-  bool get hasValue => _closed;
-
-  dynamic get value {
-    if (!_closed) {
-      throw new StateError(
-          'Cannot get the value until one is added and the Sink is closed.');
-    }
-    return _value;
-  }
-
-  void add(Object o) {
-    if (_added) {
-      throw new StateError('Cannot call add more than once.');
-    }
-    _added = true;
-    _value = o;
-  }
-
-  void close() {
-    if (!_added) {
-      throw new StateError('No value was provided.');
-    }
-    _closed = true;
-  }
-}

@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:convert/convert.dart';
 import 'package:crypto/crypto.dart';
 import 'package:github_hook/github_hook.dart';
 import 'package:shelf/shelf.dart';
@@ -133,16 +134,13 @@ void main() {
 String _getSha1Hmac(String content, String _secret) {
   var bytes = _getHmac(content, _secret);
 
-  return CryptoUtils.bytesToHex(bytes);
+  return hex.encode(bytes);
 }
 
 List<int> _getHmac(String content, String secret) {
-  var hmac = new HMAC(new SHA1(), UTF8.encode(secret));
+  var hmac = new Hmac(sha1, UTF8.encode(secret));
 
-  hmac.add(UTF8.encode(content));
-  hmac.close();
-
-  return hmac.digest;
+  return hmac.convert(UTF8.encode(content)).bytes;
 }
 
 const _dummyPayload = const {
